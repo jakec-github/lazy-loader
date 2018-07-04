@@ -1,0 +1,20 @@
+.main {
+  width: 50%;
+  min-height: 50rem;
+  padding: 3rem 4.5rem;
+  background-color: #E5D3A7;
+  margin: auto;
+  margin-top: 5rem;
+  margin-bottom: 2.5rem;
+  box-shadow: 0 2rem 6rem rgba(0, 0, 0, .3);
+}
+
+.text {
+  font-family: serif;
+  font-size: 1.9rem;
+  color: #222222;
+
+  &:first-child::first-letter {
+    font-size: 3.5rem;
+  }
+}
