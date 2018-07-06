@@ -40,8 +40,12 @@
     "webpack-merge": "^4.1.2"
   },
   "dependencies": {
+    "@google-cloud/translate": "^1.1.0",
     "autoprefixer": "^8.6.0",
     "babel-polyfill": "^6.26.0",
+    "body-parser": "^1.18.3",
+    "cors": "^2.8.4",
+    "express": "^4.16.3",
     "prop-types": "^15.6.1",
     "react": "^16.4.0",
     "react-dom": "^16.4.0",

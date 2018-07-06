@@ -13,8 +13,13 @@
   font-family: serif;
   font-size: 1.9rem;
   color: #222222;
+  line-height: 2.5rem;
 
   &:first-child::first-letter {
     font-size: 3.5rem;
+  }
+
+  &:not(:first-child) {
+    margin-top: 2.5rem;
   }
 }

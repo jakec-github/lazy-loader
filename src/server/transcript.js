@@ -14,7 +14,6 @@ function getTranscript() {
     res.on('end', () => {
       paragraphs = JSON.parse(data).transcript.words.reduce(
         (value, word) => {
-          // If first item in last array in value .para = word.para push to last array
           if (value.length && value[value.length - 1][0].para === word.para) {
             return [...value.slice(0, -1), [...value[value.length - 1], word]]
           }
