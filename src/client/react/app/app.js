@@ -1,9 +1,11 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import Language from './components/language/language'
-import Main from './components/main/main'
-import Nav from './components/nav/nav'
+import Language from './../components/language/language'
+import Main from './../components/main/main'
+import Nav from './../components/nav/nav'
+
+import Style from './app.scss'
 
 export default class extends React.Component {
   constructor(props) {
@@ -18,11 +20,12 @@ export default class extends React.Component {
   }
 
   updatePage = (page) => {
-    console.log(`Updating page to ${page}`)
-    console.log(`Paragraphs: ${this.state.paragraphs}`)
+    // console.log(`Updating page to ${page}`)
+    // console.log(`Paragraphs: ${this.state.paragraphs}`)
     this.setState({
       page,
       language: 'en',
+      frenchParagraphs: [],
     })
   }
 
@@ -49,11 +52,12 @@ export default class extends React.Component {
 
   render() {
     const { page, paragraphs, language, frenchParagraphs } = this.state
-    console.log('rendering app')
-    console.log(language)
+    // console.log('rendering app')
+    // console.log(language)
+    console.log(paragraphs)
     return (
-      <React.Fragment>
-        { frenchParagraphs.length &&
+      <div className={Style.app} >
+        { frenchParagraphs.length > 0 &&
           <Language
             language={language}
             updateLanguage={this.updateLanguage}
@@ -73,10 +77,10 @@ export default class extends React.Component {
           page={page}
           paragraphs={paragraphs}
           updatePage={this.updatePage}
-          // updateLanguage={this.updateLanguage}
+          frenchParagraphs={frenchParagraphs}
           updateFrenchParagraphs={this.updateFrenchParagraphs}
         />
-      </React.Fragment>
+      </div>
     )
   }
 }

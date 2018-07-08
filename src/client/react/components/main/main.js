@@ -43,6 +43,7 @@ export default class extends React.Component {
     const { index } = this.state
 
     if (index === prevState.index) {
+      console.log('Trigggering measureScroll')
       this.measureScroll()
     }
   }
@@ -89,23 +90,29 @@ export default class extends React.Component {
   measureScroll = () => {
     const { page, paragraphs, language } = this.props
 
+    console.log('Checking for lazy load')
+
     if (language === 'fr') {
       return
     }
     // console.log('Screen has changed')
     // console.log((window.innerHeight) - document.getElementById('height').getBoundingClientRect().bottom)
-    const bottom = window.innerHeight - document.getElementById('height').getBoundingClientRect().bottom
-    if (bottom > -300) {
-
+    const bottom = window.innerHeight -
+      document.getElementById('height').getBoundingClientRect().bottom
+    if (bottom > -50) {
       // Is this breaking?
-      window.removeEventListener('resize', this.measureScroll)
-      window.removeEventListener('scroll', this.measureScroll)
+      // window.removeEventListener('resize', this.measureScroll)
+      // window.removeEventListener('scroll', this.measureScroll)
 
       // console.log('lazy')
-      if (paragraphs.length && page >= paragraphs[paragraphs.length - 1].page) {
-        console.log(paragraphs.length)
-        console.log(page)
-        console.log(paragraphs[paragraphs.length - 1].page)
+      if (
+        paragraphs.length
+        && page >= parseInt(paragraphs[paragraphs.length - 1].page, 10)
+      ) {
+        // console.log(paragraphs.length)
+        // console.log(page)
+        // console.log(paragraphs[paragraphs.length - 1].page)
+        console.log('loading due to scroll')
         this.getText(1)
       }
     }
@@ -115,7 +122,7 @@ export default class extends React.Component {
     // const { paragraphs } = this.state
     const { page, paragraphs, language } = this.props
     // console.log('rendering main')
-    // console.log(paragraphs)
+    console.log(paragraphs)
     // console.log(page)
     const text = paragraphs
       .filter(paragraph => parseInt(paragraph.page, 10) === page)

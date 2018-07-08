@@ -1,7 +1,7 @@
 const https = require('https')
 
 // Should be able to return directly
-let paragraphs = ['hey']
+let paragraphs = [[{ name: 'empty', para: 'p1-0' }]]
 
 function getTranscript() {
   https.get('https://s3.amazonaws.com/com.trint.misc.challenge/transcript.json', (res) => {

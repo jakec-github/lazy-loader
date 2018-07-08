@@ -43,3 +43,7 @@ bin/
 include/
 lib/
 pip-selfcheck.json
+
+# Private #
+#####################
+lazy-loader-d33cade846fb.json

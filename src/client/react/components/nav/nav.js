@@ -7,8 +7,8 @@ export default class extends React.Component {
   static propTypes = {
     page: PropTypes.number.isRequired,
     paragraphs: PropTypes.arrayOf(PropTypes.object).isRequired,
+    frenchParagraphs: PropTypes.arrayOf(PropTypes.object).isRequired,
     updatePage: PropTypes.func.isRequired,
-    // updateLanguage: PropTypes.func.isRequired,
     updateFrenchParagraphs: PropTypes.func.isRequired,
   }
 
@@ -25,13 +25,20 @@ export default class extends React.Component {
 
   handleTranslateClick = () => {
     const { page, paragraphs, updateFrenchParagraphs } = this.props
-
+    console.log('------')
     const index = paragraphs.findIndex(paragraph => parseInt(paragraph.page, 10) === page)
-    const number = paragraphs.length - (index + 1) // Doesn't work on last page
+    console.log(index)
+    const lastIndex = paragraphs
+      .slice()
+      .reverse()
+      .findIndex(paragraph => parseInt(paragraph.page, 10) === page)
+    // console.log(lastIndex)
+    // console.log(paragraphs.length)
+    const number = paragraphs.length - lastIndex - index // paragraphs.length - (index + 1)
 
-    console.log('index: ' + index)
-    console.log('number' + number)
-    console.log('page' + page)
+    // console.log('index: ' + index)
+    // console.log('number' + number)
+    // console.log('page' + page)
 
     fetch(`http://localhost:3000/translation/${index}/${number}`)
       .then(response => response.json())
@@ -41,6 +48,7 @@ export default class extends React.Component {
   }
 
   render() {
+    const { frenchParagraphs } = this.props
     return (
       <nav className={Style.nav}>
         <button
@@ -49,12 +57,14 @@ export default class extends React.Component {
         >
           Next Page
         </button>
-        <button
-          className={Style.button}
-          onClick={this.handleTranslateClick}
-        >
-          Translate
-        </button>
+        { frenchParagraphs.length === 0 &&
+          <button
+            className={Style.button}
+            onClick={this.handleTranslateClick}
+          >
+            Translate
+          </button>
+        }
       </nav>
     )
   }

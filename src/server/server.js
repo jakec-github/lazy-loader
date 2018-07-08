@@ -30,8 +30,8 @@ app.get('/paragraphs/:index/:number', cors(), (req, res) => {
   //   console.log('-----')
   // })
 
-  console.log('index: ' + index)
-  console.log('number: ' + number)
+  // console.log('index: ' + index)
+  // console.log('number: ' + number)
 
   const paragraphs = transcript.getParagraphs().slice(index, index + number)
 
@@ -79,7 +79,7 @@ app.get('/translation/:index/:number', cors(), (req, res) => {
         console.log(translation)
         translatedParagraphs.push({
           page: paragraph.page,
-          translation,
+          translation: translation.trim(),
         })
       }))
   })
@@ -97,7 +97,7 @@ app.listen(3000, () => {
 })
 
 function formatParagraphs(paragraphs) {
-  console.log(paragraphs[0])
+  console.log(paragraphs[0][0])
   return paragraphs.map(paragraph =>
     paragraph.reduce((value, word) => ({
       page: word.para.match(/\d/)[0],

@@ -1,0 +1,25 @@
+.language {
+  position: absolute;
+  top: -5rem;
+  left: 3rem;
+  display: flex;
+  border-radius: .8rem .8rem 0 0;
+  overflow: hidden;
+  box-shadow: 0 2rem 6rem rgba(0, 0, 0, .3);
+  z-index: -1;
+  cursor: pointer;
+}
+
+.image {
+  height: 5rem;
+  width: 8rem;
+  filter: grayscale(100%);
+  opacity: 0.5;
+
+  &-active {
+    filter: grayscale(0);
+    height: 5rem;
+    width: 8rem;
+    opacity: 1;
+  }
+}
