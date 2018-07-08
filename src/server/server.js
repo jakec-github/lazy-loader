@@ -21,12 +21,25 @@ app.get('/paragraphs/:index/:number', cors(), (req, res) => {
   const index = parseInt(req.params.index, 10)
   const number = parseInt(req.params.number, 10)
   const total = transcript.getParagraphs().length
+
+  // // ///////
+  // transcript.getParagraphs().forEach((paragraph) => {
+  //   console.log(paragraph[0])
+  //   console.log('-----')
+  // })
+
+  console.log('index: ' + index)
+  console.log('number: ' + number)
+
   const paragraphs = transcript.getParagraphs().slice(index, index + number)
-  console.log(paragraphs)
+
+  // paragraphs.forEach((paragraph) => {
+  //   console.log(paragraph[0])
+  // })
 
   const formattedParagraphs = formatParagraphs(paragraphs)
 
-  console.log(formattedParagraphs)
+  // console.log(formattedParagraphs)
   // [parseInt(index, 10)]
   console.log('Returning')
   res.setHeader('Content-Type', 'application/json')
@@ -37,12 +50,27 @@ app.get('/paragraphs/:index/:number', cors(), (req, res) => {
 })
 
 app.get('/translation/:index/:number', cors(), (req, res) => {
+  console.log('-----')
   const index = parseInt(req.params.index, 10)
   const number = parseInt(req.params.number, 10)
+
+  // transcript.getParagraphs().forEach((paragraph) => {
+  //   console.log(paragraph[0])
+  //   console.log('-----')
+  // })
+
   const paragraphs = transcript.getParagraphs().slice(index, index + number)
+
+  // paragraphs.forEach((paragraph) => {
+  //   console.log(paragraph[0])
+  // })
   const formattedParagraphs = formatParagraphs(paragraphs)
   const translatedParagraphs = []
   const translateRequests = []
+  // console.log('index: ' + index)
+  // console.log('number: ' + number)
+  // console.log('index: ' + index)
+  // console.log(formattedParagraphs)
   formattedParagraphs.forEach((paragraph) => {
     translateRequests.push(translate.getTranslation(paragraph.paragraph)
       .then((translation) => {
@@ -56,7 +84,7 @@ app.get('/translation/:index/:number', cors(), (req, res) => {
   Promise.all(translateRequests)
     .then(() => {
       console.log('Returning')
-      console.log(translatedParagraphs)
+      // console.log(translatedParagraphs)
       res.setHeader('Content-Type', 'application/json')
       res.send(JSON.stringify(translatedParagraphs))
     })
@@ -67,11 +95,10 @@ app.listen(3000, () => {
 })
 
 function formatParagraphs(paragraphs) {
+  console.log(paragraphs[0])
   return paragraphs.map(paragraph =>
-    paragraph.reduce((value, word) => {
-      return {
-        page: word.para.match(/\d/)[0],
-        paragraph: `${value.paragraph} ${word.name}`, // value.paragraph.concat(`${word.name}`),
-      }
-    }, { paragraph: '' }))
+    paragraph.reduce((value, word) => ({
+      page: word.para.match(/\d/)[0],
+      paragraph: `${value.paragraph} ${word.name}`, // value.paragraph.concat(`${word.name}`),
+    }), { paragraph: '' }))
 }

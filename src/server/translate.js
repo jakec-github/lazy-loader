@@ -17,8 +17,8 @@ function getTranslation(text) {
     .then((results) => {
       const translation = results[0]
 
-      console.log(`Text: ${text}`)
-      console.log(`Translation: ${translation}`)
+      // console.log(`Text: ${text}`)
+      // console.log(`Translation: ${translation}`)
       return translation
     })
     .catch((error) => {

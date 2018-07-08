@@ -6,14 +6,17 @@ import Style from './main.scss'
 export default class extends React.Component {
   static propTypes = {
     page: PropTypes.number.isRequired,
+    paragraphs: PropTypes.arrayOf(PropTypes.object).isRequired,
+    language: PropTypes.string.isRequired,
     updatePage: PropTypes.func.isRequired,
+    updateParagraphs: PropTypes.func.isRequired,
   }
 
   constructor(props) {
     super(props)
 
     this.state = {
-      paragraphs: [],
+      // paragraphs: [],
       index: 0,
       textSize: 0,
     }
@@ -37,33 +40,36 @@ export default class extends React.Component {
   }
 
   componentDidUpdate() {
-    this.measureScroll()
+    // this.measureScroll()
   }
 
   getText = (number) => {
-    const { index, textSize, paragraphs } = this.state
-    const { page, updatePage } = this.props
+    const { index, textSize } = this.state
+    const { page, updatePage, paragraphs, updateParagraphs } = this.props
     if (textSize <= paragraphs.length && textSize) {
       return
     }
     console.log('Fetching')
-    // console.log('index ' + index)
-    // console.log('number ' + number)
+    console.log('index ' + index)
+    console.log('number ' + number)
+    this.setState({
+      index: index + number,
+    })
     fetch(`http://localhost:3000/paragraphs/${index}/${number}`)
       .then(response => response.json())
       .then((data) => {
         // console.log('data ' + data.paragraphs)
         console.log('-----')
-        console.log([...paragraphs, ...data.paragraphs])
+        // console.log([...paragraphs, ...data.paragraphs])
         this.setState({
-          paragraphs: [...paragraphs, ...data.paragraphs],
-          index: index + number,
+          // paragraphs: [...paragraphs, ...data.paragraphs],
+          // index: index + number,
           textSize: data.total,
         })
+        // updateParagraphs([...paragraphs, ...data.paragraphs])
+        updateParagraphs(data.paragraphs)
 
         if (page === 0) {
-          console.log('++++++++')
-          console.log(data.paragraphs[0].page)
           updatePage(parseInt(data.paragraphs[0].page, 10))
         }
       })
@@ -76,25 +82,33 @@ export default class extends React.Component {
   }
 
   measureScroll = () => {
-    const { paragraphs } = this.state
-    const { page } = this.props
+    const { page, paragraphs, language } = this.props
+
+    if (language === 'fr') {
+      return
+    }
     // console.log('Screen has changed')
     // console.log((window.innerHeight) - document.getElementById('height').getBoundingClientRect().bottom)
     const bottom = window.innerHeight - document.getElementById('height').getBoundingClientRect().bottom
     if (bottom > -300) {
-      window.removeEventListener('resize', this.measureScroll)
+
+      // Is this breaking?
+      // window.removeEventListener('resize', this.measureScroll)
+      // window.removeEventListener('scroll', this.measureScroll)
+
       // console.log('lazy')
-      if (page >= paragraphs[paragraphs.length - 1].page) {
+      if (paragraphs.length && page >= paragraphs[paragraphs.length - 1].page) {
         this.getText(1)
       }
     }
   }
 
   render() {
-    const { paragraphs } = this.state
-    const { page } = this.props
-    console.log('rendering main')
-    console.log(page)
+    // const { paragraphs } = this.state
+    const { page, paragraphs, language } = this.props
+    // console.log('rendering main')
+    // console.log(paragraphs)
+    // console.log(page)
     const text = paragraphs
       .filter(paragraph => parseInt(paragraph.page, 10) === page)
       .map((paragraph, i) => (
@@ -102,10 +116,10 @@ export default class extends React.Component {
           className={Style.text}
           key={i.toString()}
         >
-          {paragraph.paragraph}
+          {language === 'en' ? paragraph.paragraph : paragraph.translation}
         </p>
       ))
-
+    console.log(text)
     return (
       <main id="height" className={Style.main}>
         {text}
