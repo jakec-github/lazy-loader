@@ -39,8 +39,12 @@ export default class extends React.Component {
     // }, 1000)
   }
 
-  componentDidUpdate() {
-    // this.measureScroll()
+  componentDidUpdate(prevProps, prevState) {
+    const { index } = this.state
+
+    if (index === prevState.index) {
+      this.measureScroll()
+    }
   }
 
   getText = (number) => {
@@ -60,6 +64,7 @@ export default class extends React.Component {
       .then((data) => {
         // console.log('data ' + data.paragraphs)
         console.log('-----')
+        console.log(data)
         // console.log([...paragraphs, ...data.paragraphs])
         this.setState({
           // paragraphs: [...paragraphs, ...data.paragraphs],
@@ -93,11 +98,14 @@ export default class extends React.Component {
     if (bottom > -300) {
 
       // Is this breaking?
-      // window.removeEventListener('resize', this.measureScroll)
-      // window.removeEventListener('scroll', this.measureScroll)
+      window.removeEventListener('resize', this.measureScroll)
+      window.removeEventListener('scroll', this.measureScroll)
 
       // console.log('lazy')
       if (paragraphs.length && page >= paragraphs[paragraphs.length - 1].page) {
+        console.log(paragraphs.length)
+        console.log(page)
+        console.log(paragraphs[paragraphs.length - 1].page)
         this.getText(1)
       }
     }
@@ -119,7 +127,7 @@ export default class extends React.Component {
           {language === 'en' ? paragraph.paragraph : paragraph.translation}
         </p>
       ))
-    console.log(text)
+    // console.log(text)
     return (
       <main id="height" className={Style.main}>
         {text}

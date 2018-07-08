@@ -11,9 +11,11 @@ const app = express()
 // Should return full transcript to server
 transcript.getTranscript()
 
-app.get('/', (req, res) => {
-  res.sendFile(`${__dirname}/confirm.html`)
-})
+app.use(express.static('dist'))
+
+// app.get('/', (req, res) => {
+//   res.sendFile(`/Users/jake.chorley/Documents/personal_development/lazy-loader/dist/index.html`) // Should serve react
+// })
 
 app.get('/paragraphs/:index/:number', cors(), (req, res) => {
   // Should validate that index parses as integer
