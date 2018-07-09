@@ -1,5 +1,4 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 
 import Language from './../components/language/language'
 import Main from './../components/main/main'
@@ -20,8 +19,6 @@ export default class extends React.Component {
   }
 
   updatePage = (page) => {
-    // console.log(`Updating page to ${page}`)
-    // console.log(`Paragraphs: ${this.state.paragraphs}`)
     this.setState({
       page,
       language: 'en',
@@ -37,7 +34,6 @@ export default class extends React.Component {
   }
 
   updateFrenchParagraphs = (frenchParagraphs) => {
-    // console.log('Updating French Paragraphs')
     this.setState({
       frenchParagraphs,
       language: 'fr',
@@ -52,9 +48,8 @@ export default class extends React.Component {
 
   render() {
     const { page, paragraphs, language, frenchParagraphs } = this.state
-    // console.log('rendering app')
-    // console.log(language)
-    console.log(paragraphs)
+
+    // frenchParagraphs.length is used to determine if a translation is available
     return (
       <div className={Style.app} >
         { frenchParagraphs.length > 0 &&
@@ -84,12 +79,3 @@ export default class extends React.Component {
     )
   }
 }
-
-// export default function App() {
-//   return (
-//     <React.Fragment>
-//       <Main />
-//       <Nav />
-//     </React.Fragment>
-//   )
-// }

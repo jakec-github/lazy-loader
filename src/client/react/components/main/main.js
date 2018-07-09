@@ -16,65 +16,42 @@ export default class extends React.Component {
     super(props)
 
     this.state = {
-      // paragraphs: [],
       index: 0,
       textSize: 0,
     }
   }
 
   componentDidMount() {
+    // Retrieves the first paragraphs and sets listeners
+
     this.getText(2)
     this.lazyLoadListener()
-
-    // console.log(window.innerHeight)
-    //
-    // console.log(document.getElementById('height').getBoundingClientRect().bottom)
-    // console.log(document.getElementById('height').offsetHeight)
-    // console.log(document.getElementById('height').scrollHeight)
-    //
-    // setTimeout(() => {
-    //   console.log(document.getElementById('height').clientHeight)
-    //   console.log(document.getElementById('height').offsetHeight)
-    //   console.log(document.getElementById('height').scrollHeight)
-    // }, 1000)
-  }
-
-  componentDidUpdate(prevProps, prevState) {
-    const { index } = this.state
-
-    if (index === prevState.index) {
-      console.log('Trigggering measureScroll')
-      this.measureScroll()
-    }
   }
 
   getText = (number) => {
     const { index, textSize } = this.state
     const { page, updatePage, paragraphs, updateParagraphs } = this.props
+
+    // Prevents paragraphs being requested once the total is reached
     if (textSize <= paragraphs.length && textSize) {
       return
     }
-    console.log('Fetching')
-    console.log('index ' + index)
-    console.log('number ' + number)
+
+    // Allows state to keep track of which paragraphs have been requested
+    // This is necessary to allow a fetch request to be made before the last has returned
+    // however it is not a solution that handles errors robustly
     this.setState({
       index: index + number,
     })
-    fetch(`http://localhost:3000/paragraphs/${index}/${number}`)
+    fetch(`/paragraphs/${index}/${number}`)
       .then(response => response.json())
       .then((data) => {
-        // console.log('data ' + data.paragraphs)
-        console.log('-----')
-        console.log(data)
-        // console.log([...paragraphs, ...data.paragraphs])
         this.setState({
-          // paragraphs: [...paragraphs, ...data.paragraphs],
-          // index: index + number,
           textSize: data.total,
         })
-        // updateParagraphs([...paragraphs, ...data.paragraphs])
         updateParagraphs(data.paragraphs)
 
+        // Sets page correctly on first paragraph
         if (page === 0) {
           updatePage(parseInt(data.paragraphs[0].page, 10))
         }
@@ -83,47 +60,38 @@ export default class extends React.Component {
 
   lazyLoadListener = () => {
     window.addEventListener('scroll', this.measureScroll)
-
     window.addEventListener('resize', this.measureScroll)
   }
 
   measureScroll = () => {
     const { page, paragraphs, language } = this.props
 
-    console.log('Checking for lazy load')
-
+    // No lazyloading is required when translated
     if (language === 'fr') {
       return
     }
-    // console.log('Screen has changed')
-    // console.log((window.innerHeight) - document.getElementById('height').getBoundingClientRect().bottom)
+
     const bottom = window.innerHeight -
       document.getElementById('height').getBoundingClientRect().bottom
     if (bottom > -50) {
-      // Is this breaking?
+      // Talking point
       // window.removeEventListener('resize', this.measureScroll)
       // window.removeEventListener('scroll', this.measureScroll)
 
-      // console.log('lazy')
       if (
         paragraphs.length
         && page >= parseInt(paragraphs[paragraphs.length - 1].page, 10)
       ) {
-        // console.log(paragraphs.length)
-        // console.log(page)
-        // console.log(paragraphs[paragraphs.length - 1].page)
-        console.log('loading due to scroll')
         this.getText(1)
       }
     }
   }
 
   render() {
-    // const { paragraphs } = this.state
     const { page, paragraphs, language } = this.props
-    // console.log('rendering main')
-    console.log(paragraphs)
-    // console.log(page)
+
+    // Uses filter to select only paragraphs from the right page
+    // Better solution could be to store paragraphs in arrays indexed to match page number
     const text = paragraphs
       .filter(paragraph => parseInt(paragraph.page, 10) === page)
       .map((paragraph, i) => (
@@ -134,7 +102,6 @@ export default class extends React.Component {
           {language === 'en' ? paragraph.paragraph : paragraph.translation}
         </p>
       ))
-    // console.log(text)
     return (
       <main id="height" className={Style.main}>
         {text}

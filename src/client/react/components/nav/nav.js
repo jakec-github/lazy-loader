@@ -12,10 +12,6 @@ export default class extends React.Component {
     updateFrenchParagraphs: PropTypes.func.isRequired,
   }
 
-  someFunction = () => {
-
-  }
-
   handleNextPageClick = () => {
     const { page, updatePage } = this.props
     document.body.scrollTop = 0
@@ -25,22 +21,17 @@ export default class extends React.Component {
 
   handleTranslateClick = () => {
     const { page, paragraphs, updateFrenchParagraphs } = this.props
-    console.log('------')
+
+    // These variables get the index of the first paragraph on the current page
+    // and the number of paragraphs
     const index = paragraphs.findIndex(paragraph => parseInt(paragraph.page, 10) === page)
-    console.log(index)
     const lastIndex = paragraphs
       .slice()
       .reverse()
       .findIndex(paragraph => parseInt(paragraph.page, 10) === page)
-    // console.log(lastIndex)
-    // console.log(paragraphs.length)
-    const number = paragraphs.length - lastIndex - index // paragraphs.length - (index + 1)
+    const number = paragraphs.length - lastIndex - index
 
-    // console.log('index: ' + index)
-    // console.log('number' + number)
-    // console.log('page' + page)
-
-    fetch(`http://localhost:3000/translation/${index}/${number}`)
+    fetch(`/translation/${index}/${number}`)
       .then(response => response.json())
       .then((data) => {
         updateFrenchParagraphs(data)

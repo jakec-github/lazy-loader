@@ -12,6 +12,9 @@ function getTranscript() {
     })
 
     res.on('end', () => {
+      // Parses the data and returns an array of arrays
+      // Each array conatins a paragraph of words
+
       paragraphs = JSON.parse(data).transcript.words.reduce(
         (value, word) => {
           if (value.length && value[value.length - 1][0].para === word.para) {
@@ -21,7 +24,6 @@ function getTranscript() {
         },
         [],
       )
-      // console.log(paragraphs)
     })
   })
     .on('error', (error) => {

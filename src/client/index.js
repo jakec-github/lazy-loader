@@ -5,8 +5,6 @@ import App from './react/app/app'
 
 import './scss/main.scss'
 
-console.log('Testing')
-
 ReactDOM.render(
   <App />,
   document.getElementById('root'),
